@@ -97,6 +97,14 @@ func main() {
 	fmt.Println(sum)
 
 	//Part 2
+	totalSize := 70000000
+	neededSpace := 30000000
+	currentSpace := calcDirSize(root)
+	availableSpace := totalSize - currentSpace
+	freeUpSpace := neededSpace - availableSpace
+	minFreeUp := neededSpace
+	traversePart2(root, freeUpSpace, &minFreeUp)
+	fmt.Println(minFreeUp)
 
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
@@ -111,6 +119,18 @@ func traversePart1(d *dir, sum *int) {
 	}
 	for _, dir := range d.dirs {
 		traversePart1(dir, sum)
+	}
+}
+
+func traversePart2(d *dir, freeUpSpace int, minFreeUp *int) {
+	size := calcDirSize(d)
+	if size >= freeUpSpace {
+		if size < *minFreeUp {
+			*minFreeUp = size
+		}
+	}
+	for _, dir := range d.dirs {
+		traversePart2(dir, freeUpSpace, minFreeUp)
 	}
 }
 
